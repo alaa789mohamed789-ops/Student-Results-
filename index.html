@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <title>Student Management System</title>
+</head>
+<body>
+
+<script>
+
+// 1. إنشاء Class باسم Student
+
+class Student {
+
+    // Constructor لاستقبال بيانات الطالب
+    constructor(id, name, grades, attendance) {
+        this.id = id;
+        this.name = name;
+        this.grades = grades;
+        this.attendance = attendance;
+    }
+
+    // 2. حساب متوسط الدرجات باستخدام reduce
+    getAverage() {
+        let total = this.grades.reduce((sum, grade) => sum + grade, 0);
+
+        return total / this.grades.length;
+    }
+
+    // 3. تحديد التقدير بالحروف
+    getGrade(average) {
+
+        if (average >= 90) {
+            return "A";
+        }
+        else if (average >= 80) {
+            return "B";
+        }
+        else if (average >= 70) {
+            return "C";
+        }
+        else if (average >= 60) {
+            return "D";
+        }
+        else if (average >= 50) {
+            return "E";
+        }
+        else {
+            return "F";
+        }
+    }
+
+    // 4. تحديد النتيجة النهائية
+    getFinalResult(average) {
+
+        if (average >= 50 && this.attendance >= 75) {
+            return "ناجح";
+        }
+        else {
+            return "يحتاج مراجعة";
+        }
+    }
+}
+
+// 5. إنشاء مصفوفة الطلاب الرئيسية
+
+let studentsList = [
+
+    new Student(1, "Ahmed", [90, 85, 95], 90),
+
+    new Student(2, "Mona", [45, 40, 50], 80),
+
+    new Student(3, "Ali", [48, 45, 51], 90),
+
+    new Student(4, "Sara", [60, 65, 70], 70)
+
+];
+
+// 6. لجنة الرأفة باستخدام filter
+
+let strugglingStudents = studentsList.filter(student => {
+
+    let average = student.getAverage();
+
+    return average >= 40 && average <= 49;
+
+});
+
+// 7. إضافة 5 درجات رأفة باستخدام map
+
+let graceStudents = strugglingStudents.map(student => {
+
+    return {
+        id: student.id,
+        name: student.name,
+        oldAverage: student.getAverage(),
+        newAverage: student.getAverage() + 5
+    };
+
+});
+
+// 8. جمع المتوسطات الجديدة باستخدام reduce
+
+let totalGrace = graceStudents.reduce((sum, student) => {
+
+    return sum + student.newAverage;
+
+}, 0);
+
+// 9. حساب متوسط الرأفة مع الحماية من القسمة على صفر
+
+let graceAverage = graceStudents.length > 0
+    ? totalGrace / graceStudents.length
+    : 0;
+
+// 10. طباعة تقرير جميع الطلاب
+
+console.log("===== Students Report =====");
+
+studentsList.forEach(student => {
+
+    let average = student.getAverage();
+
+    console.log("Student Name:", student.name);
+    console.log("Average:", average);
+    console.log("Grade:", student.getGrade(average));
+    console.log("Result:", student.getFinalResult(average));
+
+    console.log("--------------------");
+
+});
+
+// 11. طباعة الطلاب الذين حصلوا على الرأفة
+
+console.log("===== Grace Committee =====");
+
+console.log(graceStudents);
+
+// 12. طباعة متوسط درجات الطلاب بعد الرأفة
+
+console.log("Grace Average:", graceAverage);
+
+</script>
+
+</body>
+</html>
